@@ -41,8 +41,8 @@ def create_app():
     # Serve React static files
     @app.route('/static/<path:filename>')
     def serve_static(filename):
-        build_folder = os.path.join(os.path.dirname(__file__), 'frontend', 'build')
-        return send_from_directory(os.path.join(build_folder, 'static'), filename)
+        build_folder = os.path.join(os.path.dirname(__file__), 'frontend', 'build', 'static')
+        return send_from_directory(build_folder, filename)
     
     # Serve React App (catch-all route)
     @app.route('/', defaults={'path': ''})
@@ -50,9 +50,10 @@ def create_app():
     def serve_react_app(path=''):
         build_folder = os.path.join(os.path.dirname(__file__), 'frontend', 'build')
         
-        # Don't serve index.html for static files
-        if path.startswith('static/'):
-            return send_from_directory(build_folder, path)
+        # Don't serve index.html for API routes
+        if path.startswith('api/') or path.startswith('auth/') or '/api/' in path:
+            # This will be handled by the appropriate API routes defined elsewhere
+            return {"error": "API route not found"}, 404
         elif path != "" and os.path.exists(os.path.join(build_folder, path)):
             return send_from_directory(build_folder, path)
         else:
