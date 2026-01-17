@@ -54,12 +54,14 @@ def create_app():
             # Return 404 so Flask's API routes can handle them
             return {"error": "API route not found"}, 404
         
+        # For empty path, serve index.html
+        if path == "":
+            return send_from_directory(build_folder, 'index.html')
+        
         # Serve static files
         if path.startswith('static/'):
-            static_folder = os.path.join(build_folder, path)
-            if os.path.exists(static_folder):
-                return send_from_directory(build_folder, path)
-        elif path != "" and os.path.exists(os.path.join(build_folder, path)):
+            return send_from_directory(build_folder, path)
+        elif os.path.exists(os.path.join(build_folder, path)):
             return send_from_directory(build_folder, path)
         else:
             return send_from_directory(build_folder, 'index.html')
