@@ -38,8 +38,12 @@ def create_app():
     def health_check():
         return {"message": "TradeSense API is running", "status": "success"}
     
+    # Root route for API server
+    @app.route('/')
+    def root():
+        return {"message": "TradeSense API Server", "status": "running", "frontend_url": "https://tradesense-projet.vercel.app"}
+    
     # Serve React App (catch-all route)
-    @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
     def serve_react_app(path=''):
         build_folder = os.path.join(os.path.dirname(__file__), 'frontend', 'build')
