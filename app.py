@@ -52,8 +52,10 @@ def create_app():
         # Serve static files
         if path.startswith('static/'):
             return send_from_directory(build_folder, path)
-        elif path == "" or os.path.exists(os.path.join(build_folder, path)):
-            return send_from_directory(build_folder, path or 'index.html')
+        elif path == "":
+            return send_from_directory(build_folder, 'index.html')
+        elif os.path.exists(os.path.join(build_folder, path)):
+            return send_from_directory(build_folder, path)
         else:
             return send_from_directory(build_folder, 'index.html')
     
