@@ -33,19 +33,6 @@ def create_app():
     app.register_blueprint(real_time_data_bp)
     app.register_blueprint(ai_signals_bp)
     
-    # Serve React App (catch-all route)
-    @app.route('/', defaults={'path': ''})
-    @app.route('/<path:path>')
-    def serve_react_app(path=''):
-        build_folder = os.path.join(os.path.dirname(__file__), 'frontend', 'build')
-        
-        # If it's a specific file that exists, serve it
-        if path and os.path.exists(os.path.join(build_folder, path)):
-            return send_from_directory(build_folder, path)
-        
-        # Otherwise serve the React app (index.html)
-        return send_from_directory(build_folder, 'index.html')
-    
     # Simple API health check
     @app.route('/api/health')
     def health_check():
@@ -57,12 +44,14 @@ def create_app():
         build_folder = os.path.join(os.path.dirname(__file__), 'frontend', 'build')
         return send_from_directory(os.path.join(build_folder, 'static'), filename)
     
-    # Serve React App for frontend routes
+    # Serve React App (catch-all route)
+    @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
-    def serve(path):
+    def serve_react_app(path=''):
         build_folder = os.path.join(os.path.dirname(__file__), 'frontend', 'build')
-        # Don't serve index.html for static files or API routes
-        if path.startswith('static/') or path.startswith('api/'):
+        
+        # Don't serve index.html for static files
+        if path.startswith('static/'):
             return send_from_directory(build_folder, path)
         elif path != "" and os.path.exists(os.path.join(build_folder, path)):
             return send_from_directory(build_folder, path)
