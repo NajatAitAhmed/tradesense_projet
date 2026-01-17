@@ -38,10 +38,11 @@ def create_app():
     def health_check():
         return {"message": "TradeSense API is running", "status": "success"}
     
-    # Root route - redirect to frontend
+    # Root route - serve React app
     @app.route('/')
     def root():
-        return redirect('https://tradesense-projet-rjrmrh2sf-karima-bakbirs-projects.vercel.app')
+        build_folder = os.path.join(os.path.dirname(__file__), 'frontend', 'build')
+        return send_from_directory(build_folder, 'index.html')
     
     # Serve React App (catch-all route)
     @app.route('/<path:path>')
