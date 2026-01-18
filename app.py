@@ -40,10 +40,11 @@ def create_app():
     def health_check():
         return {"message": "TradeSense API is running", "status": "success"}
     
-    # Root route for API server
+    # Serve React App for root path as well
     @app.route('/')
-    def root():
-        return {"message": "TradeSense API is running", "status": "success"}
+    def serve_react_root():
+        build_folder = os.path.join(os.path.dirname(__file__), 'frontend', 'build')
+        return send_from_directory(build_folder, 'index.html')
     
     # Serve React App (handles other paths)
     @app.route('/<path:path>')
