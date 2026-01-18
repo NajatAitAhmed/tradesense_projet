@@ -48,11 +48,6 @@ def create_app():
     def serve_react_app(path):
         build_folder = os.path.join(os.path.dirname(__file__), 'frontend', 'build')
         
-        # Handle API routes separately
-        if path.startswith('api/') or path.startswith('users/') or path.startswith('challenges/') or path.startswith('trades/') or path.startswith('real_time_data/') or path.startswith('ai_signals/') or path.startswith('auth/'):
-            # Return 404 so Flask's API routes can handle them
-            return {"error": "API route not found"}, 404
-        
         # Serve static files
         if path.startswith('static/'):
             return send_from_directory(build_folder, path)
