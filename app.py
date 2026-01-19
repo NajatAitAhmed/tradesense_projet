@@ -67,6 +67,12 @@ def create_app():
             db.create_all()
     
     return app
+    @app.route("/")
+   def home():
+       return {
+           "message": "TradeSense API is running",
+           "status": "ok"
+       }
 
 
 # Create the app instance for Gunicorn
