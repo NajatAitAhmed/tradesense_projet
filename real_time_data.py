@@ -213,11 +213,11 @@ def update_common_prices():
         except Exception as e:
             logger.error(f"Error updating cache for {symbol}: {str(e)}")
 
-# Add job to update prices every 30 seconds
+# Add job to update prices every 5 MINUTES
 scheduler.add_job(
     func=update_common_prices,
     trigger="interval",
-    seconds=30,
+    minutes=5,
     id='price_updates',
     name='Update common stock prices',
     replace_existing=True
